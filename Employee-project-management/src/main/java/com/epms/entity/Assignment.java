@@ -1,21 +1,30 @@
 package com.epms.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Assignment {
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int id;
-	private int employeeId;
-	private int projectId;
+	@ManyToOne
+    @JoinColumn(name = "employee_id")
+	private Employee employee;
+	@ManyToOne
+    @JoinColumn(name = "project_id")
+	private Project project;
 	private String role;
-	private String allocationPercentage;
-	public Assignment(int id, int employeeId, int projectId, String role, String allocationPercentage) {
+	private int allocationPercentage;
+	public Assignment(int id, Employee employee, Project project, String role, int allocationPercentage) {
 		super();
 		this.id = id;
-		this.employeeId = employeeId;
-		this.projectId = projectId;
+		this.employee = employee;
+		this.project = project;
 		this.role = role;
 		this.allocationPercentage = allocationPercentage;
 	}
@@ -28,17 +37,17 @@ public class Assignment {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getEmployeeId() {
-		return employeeId;
+	public Employee getEmployee() {
+		return employee;
 	}
-	public void setEmployeeId(int employeeId) {
-		this.employeeId = employeeId;
+	public void setEmployee(Employee employee) {
+		this.employee = employee;
 	}
-	public int getProjectId() {
-		return projectId;
+	public Project getProject() {
+		return project;
 	}
-	public void setProjectId(int projectId) {
-		this.projectId = projectId;
+	public void setProject(Project project) {
+		this.project = project;
 	}
 	public String getRole() {
 		return role;
@@ -46,10 +55,10 @@ public class Assignment {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	public String getAllocation_percentage() {
+	public int getAllocation_percentage() {
 		return allocationPercentage;
 	}
-	public void setAllocation_percentage(String allocation_percentage) {
+	public void setAllocation_percentage(int allocation_percentage) {
 		this.allocationPercentage = allocation_percentage;
 	}
 	

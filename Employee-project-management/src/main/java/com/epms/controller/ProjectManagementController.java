@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.epms.service.ProjectManagementService;
+import com.epms.vo.AssignmentVo;
 import com.epms.vo.EmployeeVo;
+import com.epms.vo.ProjectVo;
 
 @RestController
 @RequestMapping("/epms")
@@ -20,5 +22,15 @@ public class ProjectManagementController {
 	@PostMapping("employee")
 	public String addEmployee(@RequestBody EmployeeVo employeeDetails) {
 		return projectManagementService.addEmployee(employeeDetails);
+	}
+	
+	@PostMapping("project") 
+	public String addProject(@RequestBody ProjectVo projectDetails) {
+		return projectManagementService.addProject(projectDetails);
+	}
+	
+	@PostMapping("assignment")
+	public String assignEmployeeToProject(@RequestBody AssignmentVo assignmentDetails) {
+		return projectManagementService.assignEmployeeToProject(assignmentDetails);
 	}
 }

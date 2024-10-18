@@ -1,17 +1,21 @@
 package com.epms.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "Employee")
 public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int employeeId;
 	private String firstName;
 	private String lastName;
+	@Column(unique = true)
 	private String email;
 	private String department;
 	private int salary;

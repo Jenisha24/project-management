@@ -3,10 +3,13 @@ package com.epms.entity;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 @Entity
 public class Project {
 	@Id  
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int projectId;
 	private String projectName;
 	private LocalDate startDate;
@@ -38,7 +41,7 @@ public class Project {
 	public LocalDate getStartDate() {
 		return startDate;
 	}
-	public void setStart_date(LocalDate startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 	public LocalDate getEndDate() {

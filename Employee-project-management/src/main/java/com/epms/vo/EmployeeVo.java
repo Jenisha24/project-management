@@ -1,22 +1,26 @@
 package com.epms.vo;
 
+import jakarta.persistence.Column;
+
 public class EmployeeVo {
-	private String first_name;
-	private String last_name;
+	private String firstName;
+	private String lastName;
+	@Column(unique = true)
 	private String email;
 	private String department;
 	private int salary;
-	public String getFirst_name() {
-		return first_name;
+	
+	public String getFirstName() {
+		return firstName;
 	}
-	public void setFirst_name(String first_name) {
-		this.first_name = first_name;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
-	public String getLast_name() {
-		return last_name;
+	public String getLastName() {
+		return lastName;
 	}
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	public String getEmail() {
 		return email;
