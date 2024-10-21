@@ -1,5 +1,7 @@
 package com.epms.service;
 
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,10 +49,24 @@ public class ProjectManagementService {
 	public String assignEmployeeToProject(AssignmentVo assignmentDetails) {
 		Employee employee = employeeRepo.findById(assignmentDetails.getEmployeeId()).get();
 		Project project = projectRepo.findById(assignmentDetails.getProjectId()).get();
-		int sumOfAllocationPercentage=assignmentRepo.findAllocationPercentageByEmployeeId(employee.getId());
-		int sumOfSalary=employeeRepo.findSalaryByEmployeeId(employee.getId());
-		int budget=projectRepo.findBudgetByProjectId(employee.getId());
-		if(sumOfAllocationPercentage + assignmentDetails.getAllocationPercentage() <= 100 || sumOfSalary +employee.getSalary() <=budget ) {
+		Integer sumOfAllocationPercentage=assignmentRepo.findAllocationPercentageByEmployeeId(employee.getId());
+		if (sumOfAllocationPercentage == null) {
+	        sumOfAllocationPercentage = 0; 
+	    }
+		List<Integer> employeeId=assignmentRepo.findEmployeeIdByProjectId(assignmentDetails.getProjectId());
+		int sumOfSalary=employeeRepo.findTotalSalaryByEmployeeIds(employeeId);
+		Integer budget=projectRepo.findBudgetByProjectId(assignmentDetails.getProjectId());
+		if (budget == null) {
+			budget = 0; 
+	    }
+		int salary=employeeRepo.findSalaryByEmployeeId(assignmentDetails.getEmployeeId());
+		if(sumOfAllocationPercentage + assignmentDetails.getAllocationPercentage() > 100  ) {
+	        return "Allocation percentage exceeds limit.";
+		}
+		else if(sumOfSalary + salary > budget){
+			return "Salary exceeds budget";
+		}
+		else {
 			Assignment assignEmployee = new Assignment();
 			assignEmployee.setEmployee(employee);
 			assignEmployee.setProject(project);
@@ -58,9 +74,6 @@ public class ProjectManagementService {
 			assignEmployee.setAllocation_percentage(assignmentDetails.getAllocationPercentage());
 			assignmentRepo.save(assignEmployee);
 			return "assign employee to project successfully";
-		}
-		else {
-	        return "Allocation percentage exceeds limit.";
 	    }
 
 	}

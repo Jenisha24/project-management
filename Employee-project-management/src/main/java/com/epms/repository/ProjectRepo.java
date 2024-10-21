@@ -9,7 +9,7 @@ import com.epms.entity.Project;
 @Repository
 public interface ProjectRepo extends JpaRepository<Project, Integer>{
 	
-	@Query("SELECT p.budget FROM Project p WHERE p.id = :projectId")
-	int findBudgetByProjectId(@Param("projectId") int projectId);
+	@Query("SELECT p.budget FROM Project p WHERE p.projectId = :projectId")
+	Integer findBudgetByProjectId(@Param("projectId") int projectId);
 
 }
