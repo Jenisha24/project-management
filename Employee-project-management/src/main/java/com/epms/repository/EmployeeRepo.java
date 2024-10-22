@@ -11,9 +11,10 @@ import com.epms.entity.Employee;
 @Repository
 public interface EmployeeRepo extends JpaRepository<Employee, Integer>{
 	
-	@Query("SELECT SUM(e.salary) FROM Employee e WHERE e.employeeId IN :employeeIds")
-	Integer findTotalSalaryByEmployeeIds(@Param("employeeIds") List<Integer> employeeIds);
+	@Query("SELECT SUM(CAST(:months AS double) * e.salary) FROM Employee e WHERE e.employeeId IN (:employeeIds)")
+	Double findTotalSalaryByEmployeeIds(@Param("months") double months, @Param("employeeIds") List<Integer> employeeIds);
 	
 	@Query("SELECT e.salary FROM Employee e WHERE e.employeeId = :employeeId")
 	Integer findSalaryByEmployeeId(@Param("employeeId") int employeeId);
+
 }

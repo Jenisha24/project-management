@@ -1,5 +1,8 @@
 package com.epms.service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -15,6 +18,7 @@ import com.epms.repository.EmployeeRepo;
 import com.epms.repository.ProjectRepo;
 import com.epms.vo.AssignmentVo;
 import com.epms.vo.EmployeeVo;
+import com.epms.vo.ProductDetailsVo;
 import com.epms.vo.ProjectVo;
 
 @Service
@@ -53,8 +57,15 @@ public class ProjectManagementService {
 		if (sumOfAllocationPercentage == null) {
 	        sumOfAllocationPercentage = 0; 
 	    }
-		List<Integer> employeeId=assignmentRepo.findEmployeeIdByProjectId(assignmentDetails.getProjectId());
-		int sumOfSalary=employeeRepo.findTotalSalaryByEmployeeIds(employeeId);
+		List<Integer> employeeIds=assignmentRepo.findEmployeeIdByProjectId(assignmentDetails.getProjectId());
+		LocalDate startDate=projectRepo.findStartDateByProjectId(assignmentDetails.getProjectId());
+		LocalDate endDate=projectRepo.findendDateByProjectId(assignmentDetails.getProjectId());
+        long totalMonths = ChronoUnit.MONTHS.between(startDate, endDate)+1;
+        double months = totalMonths * (assignmentDetails.getAllocationPercentage() / 100.0);
+        Double sumOfSalary= employeeRepo.findTotalSalaryByEmployeeIds(months, employeeIds); 
+        if (sumOfSalary == null) {
+            sumOfSalary = 0.0;
+        }
 		Integer budget=projectRepo.findBudgetByProjectId(assignmentDetails.getProjectId());
 		if (budget == null) {
 			budget = 0; 
@@ -63,7 +74,7 @@ public class ProjectManagementService {
 		if(sumOfAllocationPercentage + assignmentDetails.getAllocationPercentage() > 100  ) {
 	        return "Allocation percentage exceeds limit.";
 		}
-		else if(sumOfSalary + salary > budget){
+		else if(sumOfSalary + (months*salary) > budget){
 			return "Salary exceeds budget";
 		}
 		else {
@@ -76,6 +87,12 @@ public class ProjectManagementService {
 			return "assign employee to project successfully";
 	    }
 
+	}
+	
+//  get product details with employees
+	public List<Object[]> getProductDetailsWithEmployees() {
+		 List<Object[]> allDetails=projectRepo.getAllProjectDetails();
+		return allDetails;
 	}
 	
 }
