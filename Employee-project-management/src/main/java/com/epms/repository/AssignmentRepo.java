@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.epms.entity.Assignment;
+import com.epms.vo.AssignmentVo;
 
 public interface AssignmentRepo extends JpaRepository<Assignment, Integer> {
 	
@@ -15,4 +16,6 @@ public interface AssignmentRepo extends JpaRepository<Assignment, Integer> {
 	
 	@Query("SELECT a.employee.employeeId FROM Assignment a WHERE a.project.projectId = :projectId")
 	List<Integer> findEmployeeIdByProjectId(@Param("projectId") int projectId);
+	
+	
 }

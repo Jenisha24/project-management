@@ -1,14 +1,16 @@
 package com.epms.service;
 
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.ModelMap;
 
 import com.epms.entity.Assignment;
 import com.epms.entity.Employee;
@@ -17,12 +19,12 @@ import com.epms.repository.AssignmentRepo;
 import com.epms.repository.EmployeeRepo;
 import com.epms.repository.ProjectRepo;
 import com.epms.vo.AssignmentVo;
+import com.epms.vo.EmployeeDetailsVo;
 import com.epms.vo.EmployeeVo;
-import com.epms.vo.ProductDetailsVo;
 import com.epms.vo.ProjectVo;
 
 @Service
-public class ProjectManagementService {
+public class ProjectManagementService<ProjectDetailsVo, ProductDetailsVo> {
 	
 	@Autowired
 	EmployeeRepo employeeRepo; 
@@ -90,9 +92,52 @@ public class ProjectManagementService {
 	}
 	
 //  get product details with employees
-	public List<Object[]> getProductDetailsWithEmployees() {
-		 List<Object[]> allDetails=projectRepo.getAllProjectDetails();
-		return allDetails;
+	public List<ProjectDetailsVo> getProjectDetailsWithEmployees() {
+	    List<Object[]> allDetails = projectRepo.getAllProjectDetails();
+	    @SuppressWarnings("unchecked")
+		List<ProjectDetailsVo> projectDetails = (List<ProjectDetailsVo>) allDetails.stream()
+	    		.map(allDetail -> new com.epms.vo.ProjectDetailsVo(
+	    	            (int) allDetail[0],                       
+	    	            (int) allDetail[1],                
+	                    ((Date) allDetail[2]).toLocalDate(),     
+	    	            (String) allDetail[3],                     
+	                    ((Date) allDetail[4]).toLocalDate(),     
+	    	            (int) allDetail[5],                      
+	    	            (String) allDetail[6],                    
+	    	            (int) allDetail[7]                
+	    	        ))
+	    	        .collect(Collectors.toList());
+	    
+	    return projectDetails;
 	}
 	
+//	get employee details with projects
+	public List<EmployeeDetailsVo> getEmployeeDetailsWithProjects(){
+	    List<Object[]> allDetails = employeeRepo.getAllEmployeetDetails();
+		List<EmployeeDetailsVo> employeeDetails = (List<EmployeeDetailsVo>) allDetails.stream()
+	    		.map(allDetail -> new com.epms.vo.EmployeeDetailsVo(
+	    	            (int) allDetail[0],                       
+	    	            (String) allDetail[1],                
+	                    (String) allDetail[2],     
+	    	            (String) allDetail[3],                     
+	                    (String) allDetail[4],     
+	    	            (int) allDetail[5],                      
+	    	            (int) (allDetail[6] != null ? (int) allDetail[6] : 0),                     
+	    	            (String) allDetail[7]	, 
+	    	            (int) (allDetail[8] != null ? (int) allDetail[8] : 0)                     
+ 		
+	    	        ))
+	    	        .collect(Collectors.toList());
+	    
+	    return employeeDetails;
+	}
+
+//	update assignment details
+	public String updateAssignment(AssignmentVo assignmentDetails) {
+		Assignment getDetails=assignmentRepo.findById(assignmentDetails.getId()).get();
+		getDetails=modelMapper.map(assignmentDetails, Assignment.class) ;
+		assignmentRepo.save(getDetails);
+		return "assigment updated successfully";
+	}
+
 }

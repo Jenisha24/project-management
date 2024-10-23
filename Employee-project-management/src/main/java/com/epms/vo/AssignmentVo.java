@@ -3,6 +3,7 @@ package com.epms.vo;
 import com.epms.entity.Employee;
 
 public class AssignmentVo {
+	private int Id;
 	private int employeeId;
 	private int projectId;
 	private String role;
@@ -31,5 +32,12 @@ public class AssignmentVo {
 	public void setAllocationPercentage(int allocationPercentage) {
 		this.allocationPercentage = allocationPercentage;
 	}
+	public Integer getId() {
+		return null;
+	}
+	public void setId(int id) {
+		Id = id;
+	}
+	
 	
 }
