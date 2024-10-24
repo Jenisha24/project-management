@@ -1,10 +1,9 @@
 package com.epms.service;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,28 +50,29 @@ public class ProjectManagementService<ProjectDetailsVo, ProductDetailsVo> {
 		return "project added successfully";
 	}
 	
-//	assign employee to project
-	public String assignEmployeeToProject(AssignmentVo assignmentDetails) {
+//	assign employee to project and update assignment
+	public String assignEmployeeToProjectAndUpdate(AssignmentVo assignmentDetails) {
 		Employee employee = employeeRepo.findById(assignmentDetails.getEmployeeId()).get();
 		Project project = projectRepo.findById(assignmentDetails.getProjectId()).get();
-		Integer sumOfAllocationPercentage=assignmentRepo.findAllocationPercentageByEmployeeId(employee.getId());
+		Integer sumOfAllocationPercentage=assignmentRepo.findAllocationPercentageByEmployeeId(employee.getId(), assignmentDetails.getId());
 		if (sumOfAllocationPercentage == null) {
 	        sumOfAllocationPercentage = 0; 
 	    }
-		List<Integer> employeeIds=assignmentRepo.findEmployeeIdByProjectId(assignmentDetails.getProjectId());
 		LocalDate startDate=projectRepo.findStartDateByProjectId(assignmentDetails.getProjectId());
 		LocalDate endDate=projectRepo.findendDateByProjectId(assignmentDetails.getProjectId());
         long totalMonths = ChronoUnit.MONTHS.between(startDate, endDate)+1;
-        double months = totalMonths * (assignmentDetails.getAllocationPercentage() / 100.0);
-        Double sumOfSalary= employeeRepo.findTotalSalaryByEmployeeIds(months, employeeIds); 
-        if (sumOfSalary == null) {
-            sumOfSalary = 0.0;
-        }
+        ArrayList<Assignment> assignmentData = assignmentRepo.findByProjectId(assignmentDetails.getProjectId(), assignmentDetails.getId());
+        double sumOfSalary = assignmentData.stream()
+        	    .mapToDouble(assignData -> assignData.getEmployee().getSalary() * 
+        	        ((double) totalMonths * assignData.getAllocationPercentage() / 100))
+        	    .sum();
+        
 		Integer budget=projectRepo.findBudgetByProjectId(assignmentDetails.getProjectId());
 		if (budget == null) {
 			budget = 0; 
 	    }
-		int salary=employeeRepo.findSalaryByEmployeeId(assignmentDetails.getEmployeeId());
+        double months = totalMonths * (assignmentDetails.getAllocationPercentage() / 100.0);
+        int salary=employeeRepo.findSalaryByEmployeeId(assignmentDetails.getEmployeeId());
 		if(sumOfAllocationPercentage + assignmentDetails.getAllocationPercentage() > 100  ) {
 	        return "Allocation percentage exceeds limit.";
 		}
@@ -80,16 +80,26 @@ public class ProjectManagementService<ProjectDetailsVo, ProductDetailsVo> {
 			return "Salary exceeds budget";
 		}
 		else {
-			Assignment assignEmployee = new Assignment();
-			assignEmployee.setEmployee(employee);
-			assignEmployee.setProject(project);
-			assignEmployee.setRole(assignmentDetails.getRole());
-			assignEmployee.setAllocation_percentage(assignmentDetails.getAllocationPercentage());
-			assignmentRepo.save(assignEmployee);
-			return "assign employee to project successfully";
+			if(assignmentDetails.getId() == 0) {
+				Assignment assignEmployee = new Assignment();
+				assignEmployee.setEmployee(employee);
+				assignEmployee.setProject(project);
+				assignEmployee.setRole(assignmentDetails.getRole());
+				assignEmployee.setAllocationPercentage(assignmentDetails.getAllocationPercentage());
+				assignmentRepo.save(assignEmployee);
+				return "assign employee to project successfully";
+			}
+			else {
+				Assignment getDetails=assignmentRepo.findById(assignmentDetails.getId()).get();
+				getDetails=modelMapper.map(assignmentDetails, Assignment.class) ;
+				assignmentRepo.save(getDetails);
+				return "assigment updated successfully";
+			}
 	    }
 
 	}
+	
+
 	
 //  get product details with employees
 	public List<ProjectDetailsVo> getProjectDetailsWithEmployees() {
@@ -132,12 +142,20 @@ public class ProjectManagementService<ProjectDetailsVo, ProductDetailsVo> {
 	    return employeeDetails;
 	}
 
-//	update assignment details
-	public String updateAssignment(AssignmentVo assignmentDetails) {
-		Assignment getDetails=assignmentRepo.findById(assignmentDetails.getId()).get();
-		getDetails=modelMapper.map(assignmentDetails, Assignment.class) ;
-		assignmentRepo.save(getDetails);
-		return "assigment updated successfully";
+
+
+//	get assignment details
+	public AssignmentVo getAssignment(int id) {
+		Assignment assignment=assignmentRepo.findById(id).get();
+		AssignmentVo assignmentDetails=modelMapper.map(assignment, AssignmentVo.class);
+		return assignmentDetails;
+		
+	}
+	
+//	remove employee
+	public String deleteEmployee(int id) {
+		assignmentRepo.deleteById(id);
+		return "employee deleted successfully";
 	}
 
 }

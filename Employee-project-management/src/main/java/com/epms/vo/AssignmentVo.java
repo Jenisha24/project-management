@@ -8,6 +8,12 @@ public class AssignmentVo {
 	private int projectId;
 	private String role;
 	private int allocationPercentage;
+	public int getId() {
+		return Id;
+	}
+	public void setId(int id) {
+		Id = id;
+	}
 	public int getEmployeeId() {
 		return employeeId;
 	}
@@ -31,12 +37,6 @@ public class AssignmentVo {
 	}
 	public void setAllocationPercentage(int allocationPercentage) {
 		this.allocationPercentage = allocationPercentage;
-	}
-	public Integer getId() {
-		return null;
-	}
-	public void setId(int id) {
-		Id = id;
 	}
 	
 	

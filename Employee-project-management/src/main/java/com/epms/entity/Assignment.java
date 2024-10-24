@@ -55,11 +55,11 @@ public class Assignment {
 	public void setRole(String role) {
 		this.role = role;
 	}
-	public int getAllocation_percentage() {
+	public int getAllocationPercentage() {
 		return allocationPercentage;
 	}
-	public void setAllocation_percentage(int allocation_percentage) {
-		this.allocationPercentage = allocation_percentage;
+	public void setAllocationPercentage(int allocationPercentage) {
+		this.allocationPercentage = allocationPercentage;
 	}
 	
 	
