@@ -26,6 +26,9 @@ public interface ProjectRepo extends JpaRepository<Project, Integer> {
 	LocalDate findStartDateByProjectId(@Param("projectId") int projectId);
 
 	@Query("SELECT p.endDate FROM Project p WHERE p.projectId = :projectId ")
-	LocalDate findendDateByProjectId(@Param("projectId") int projectId);
+	LocalDate findEndDateByProjectId(@Param("projectId") int projectId);
+	
+	@Query("SELECT p FROM Project p")
+	List<Project> getProjectDetails();
 
 }

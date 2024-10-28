@@ -3,6 +3,7 @@ package com.epms.vo;
 import jakarta.persistence.Column;
 
 public class EmployeeVo {
+	private int employeeId;
 	private String firstName;
 	private String lastName;
 	@Column(unique = true)
@@ -10,6 +11,13 @@ public class EmployeeVo {
 	private String department;
 	private int salary;
 	
+	
+	public int getEmployeeId() {
+		return employeeId;
+	}
+	public void setEmployeeId(int employeeId) {
+		this.employeeId = employeeId;
+	}
 	public String getFirstName() {
 		return firstName;
 	}

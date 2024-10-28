@@ -25,7 +25,7 @@ import com.epms.vo.ProjectVo;
 public class ProjectManagementController {
 	
 	@Autowired
-	ProjectManagementService<ProjectDetailsVo, ?> projectManagementService;
+	ProjectManagementService projectManagementService;
 	
 	@PostMapping("/employee")
 	public String addEmployee(@RequestBody EmployeeVo employeeDetails) {
@@ -65,5 +65,15 @@ public class ProjectManagementController {
 	@DeleteMapping("/assignment/{id}")
 	public String deleteEmployee(@PathVariable int id) {
 		return projectManagementService.deleteEmployee(id);
+	}
+	
+	@GetMapping("/employees")
+	public List<EmployeeVo> getEmployees() {
+		return projectManagementService.getEmployees();
+	}
+	
+	@GetMapping("/budgetUtilization")
+	public List<ProjectVo> getProjects() {
+		return projectManagementService.getProjects();
 	}
 }

@@ -21,5 +21,10 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer>{
 			+ "FROM employee e " + "LEFT JOIN assignment a ON e.employee_id = a.employee_id "
 			+ "LEFT JOIN project p ON a.project_id = p.project_id", nativeQuery = true)
 	List<Object[]> getAllEmployeetDetails();
+	
+	@Query("SELECT e.employeeId FROM Employee e")
+	List<Integer> findAllEmployeeIds();
+
+	
 
 }

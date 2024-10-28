@@ -23,6 +23,16 @@ public interface AssignmentRepo extends JpaRepository<Assignment, Integer> {
 
 	@Query("SELECT a FROM Assignment a WHERE a.project.projectId = :projectId AND a.id != :id")
 	ArrayList<Assignment> findByProjectId(@Param("projectId") int projectId, @Param("id") int id);
+
+	@Query("SELECT a.employee.employeeId, SUM(a.allocationPercentage) as totalAllocation " +
+		       "FROM Assignment a " +
+		       "GROUP BY a.employee.employeeId " +
+		       "ORDER BY totalAllocation DESC")
+	List<Object[]> FindSumOfAllocationPercentage();
+	
+	@Query("SELECT a FROM Assignment a WHERE a.project.projectId = :projectId ")
+	List<Assignment> findAssignmentByProjectId(@Param("projectId") int projectId);
+
 	
 	
 }

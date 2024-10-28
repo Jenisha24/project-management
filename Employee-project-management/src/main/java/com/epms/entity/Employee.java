@@ -34,10 +34,10 @@ public class Employee {
 		super();
 	}
 
-	public int getId() {
+	public int getEmployeeId() {
 		return employeeId;
 	}
-	public void setId(int id) {
+	public void setEmployeeId(int id) {
 		this.employeeId = id;
 	}
 	public String getFirstName() {

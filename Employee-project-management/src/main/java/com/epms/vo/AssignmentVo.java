@@ -3,16 +3,16 @@ package com.epms.vo;
 import com.epms.entity.Employee;
 
 public class AssignmentVo {
-	private int Id;
+	private int assignmentId;
 	private int employeeId;
 	private int projectId;
 	private String role;
 	private int allocationPercentage;
-	public int getId() {
-		return Id;
+	public int getAssignmentId() {
+		return assignmentId;
 	}
-	public void setId(int id) {
-		Id = id;
+	public void setAssignmentId(int id) {
+		assignmentId = id;
 	}
 	public int getEmployeeId() {
 		return employeeId;
