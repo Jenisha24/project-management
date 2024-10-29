@@ -11,7 +11,7 @@ import jakarta.persistence.ManyToOne;
 public class Assignment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private int id;
+	private int assignmentId;
 	@ManyToOne
     @JoinColumn(name = "employee_id")
 	private Employee employee;
@@ -20,9 +20,9 @@ public class Assignment {
 	private Project project;
 	private String role;
 	private int allocationPercentage;
-	public Assignment(int id, Employee employee, Project project, String role, int allocationPercentage) {
+	public Assignment(int assignmentId, Employee employee, Project project, String role, int allocationPercentage) {
 		super();
-		this.id = id;
+		this.assignmentId = assignmentId;
 		this.employee = employee;
 		this.project = project;
 		this.role = role;
@@ -31,11 +31,11 @@ public class Assignment {
 	public Assignment() {
 		super();
 	}
-	public int getId() {
-		return id;
+	public int getAssignmentId() {
+		return assignmentId;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setAssignmentId(int id) {
+		this.assignmentId = id;
 	}
 	public Employee getEmployee() {
 		return employee;

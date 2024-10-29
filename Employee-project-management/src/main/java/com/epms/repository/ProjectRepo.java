@@ -1,7 +1,6 @@
 package com.epms.repository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,7 +27,6 @@ public interface ProjectRepo extends JpaRepository<Project, Integer> {
 	@Query("SELECT p.endDate FROM Project p WHERE p.projectId = :projectId ")
 	LocalDate findEndDateByProjectId(@Param("projectId") int projectId);
 	
-	@Query("SELECT p FROM Project p")
-	List<Project> getProjectDetails();
+	
 
 }

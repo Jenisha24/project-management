@@ -10,6 +10,7 @@ public class EmployeeVo {
 	private String email;
 	private String department;
 	private int salary;
+	private long totalAllocation;
 	
 	
 	public int getEmployeeId() {
@@ -48,6 +49,13 @@ public class EmployeeVo {
 	public void setSalary(int salary) {
 		this.salary = salary;
 	}
+	public long getTotalAllocation() {
+		return totalAllocation;
+	}
+	public void setTotalAllocation(long totalAllocation) {
+		this.totalAllocation = totalAllocation;
+	}
+	
 	
 	
 }

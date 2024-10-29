@@ -1,11 +1,9 @@
 package com.epms.service;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +16,7 @@ import com.epms.repository.AssignmentRepo;
 import com.epms.repository.EmployeeRepo;
 import com.epms.repository.ProjectRepo;
 import com.epms.vo.AssignmentVo;
+import com.epms.vo.EmployeeAndProjectVo;
 import com.epms.vo.EmployeeDetailsVo;
 import com.epms.vo.EmployeeVo;
 import com.epms.vo.ProjectDetailsVo;
@@ -45,6 +44,9 @@ public class ProjectManagementService {
 
 //	create project
 	public String addProject(ProjectVo projectDetails) {
+		if (projectDetails.getEndDate().isBefore(projectDetails.getStartDate())) {
+	        return "Error: End date cannot be before start date.";
+	    }
 		Project addProject = modelMapper.map(projectDetails, Project.class);
 		projectRepo.save(addProject);
 		return "project added successfully";
@@ -99,8 +101,7 @@ public class ProjectManagementService {
 						(int)( allDetail[5] != null ? (int) allDetail[5] : 0), 
 						(String) allDetail[6], 
 						(int)( allDetail[7] != null ? (int) allDetail[7] : 0)
-				)).collect(Collectors.toList());
-
+				)).toList();
 		return projectDetails;
 	}
 
@@ -118,34 +119,34 @@ public class ProjectManagementService {
 						(int) (allDetail[6] != null ? (int) allDetail[6] : 0), 
 						(String) allDetail[7],
 						(int) (allDetail[8] != null ? (int) allDetail[8] : 0)
-
-				)).collect(Collectors.toList());
-
+						)).toList();
 		return employeeDetails;
 	}
 
 //	get assignment details
-	public AssignmentVo getAssignment(int id) {
-		Assignment assignment = assignmentRepo.findById(id).get();
-		AssignmentVo assignmentDetails = modelMapper.map(assignment, AssignmentVo.class);
-		return assignmentDetails;
-
+	public List<AssignmentVo> getAssignment() {
+		List<Assignment> assignment = assignmentRepo.findAll();
+		List<AssignmentVo> assignmentDetails = assignment.stream()
+			        .map(assignments -> modelMapper.map(assignments, AssignmentVo.class))
+			        .toList();
+	     return assignmentDetails;
 	}
 
 //	remove employee
-	public String deleteEmployee(int id) {
-		assignmentRepo.deleteById(id);
-		return "employee deleted successfully";
+	public String removeEmployeeFromProject(EmployeeAndProjectVo employeeAndProjectIds) {
+		Assignment assignment=assignmentRepo.findAssignmentByEmployeeIdAndProjectId(employeeAndProjectIds.getEmployeeId(), employeeAndProjectIds.getProjectId());
+		assignmentRepo.delete(assignment);
+		return "successfully removed employee from the project";
 	}
 
 //	get top allocated employees
 	public List<EmployeeVo> getEmployees() {
-		List<Object[]> sumOfAllocationPercentageWithEmployee = assignmentRepo.FindSumOfAllocationPercentage();
+		List<Object[]> sumOfAllocationPercentOfEmployee = assignmentRepo.FindSumOfAllocationPercentage();
 		List<EmployeeVo> ListOfEmployee = new ArrayList<>();
-		for (Object[] employees : sumOfAllocationPercentageWithEmployee) {
-			int employeeId = (int) employees[0];
-			Employee employeeDetails = employeeRepo.findById(employeeId).get();
+		for (Object[] employeeData : sumOfAllocationPercentOfEmployee) {
+			Employee employeeDetails = employeeRepo.findById((int) employeeData[0]).get();
 			EmployeeVo employee = modelMapper.map(employeeDetails, EmployeeVo.class);
+			employee.setTotalAllocation((long) employeeData[1]);
 			ListOfEmployee.add(employee);
 		}
 		return ListOfEmployee;
@@ -153,7 +154,7 @@ public class ProjectManagementService {
 
 //	project budget utilization
 	public List<ProjectVo> getProjects() {
-		List<Project> projectDetails = projectRepo.getProjectDetails();
+		List<Project> projectDetails = projectRepo.findAll();
 		List<ProjectVo> listOfProject = new ArrayList<>();
 		for (Project detail : projectDetails) {
 			ProjectVo project = modelMapper.map(detail, ProjectVo.class);

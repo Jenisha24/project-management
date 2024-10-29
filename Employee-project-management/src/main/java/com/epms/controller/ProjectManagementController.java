@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.epms.service.ProjectManagementService;
 import com.epms.vo.AssignmentVo;
+import com.epms.vo.EmployeeAndProjectVo;
 import com.epms.vo.EmployeeDetailsVo;
 import com.epms.vo.EmployeeVo;
 import com.epms.vo.ProjectDetailsVo;
@@ -57,14 +57,14 @@ public class ProjectManagementController {
 		return projectManagementService.assignEmployeeToProjectAndUpdate(assignmentDetails);
 
 	}
-	@GetMapping("/assignment/{id}")
-	public AssignmentVo getAssignment(@PathVariable int id) {
-		return projectManagementService.getAssignment(id);
+	@GetMapping("/assignment")
+	public List<AssignmentVo> getAssignment() {
+		return projectManagementService.getAssignment();
 	}
 	
-	@DeleteMapping("/assignment/{id}")
-	public String deleteEmployee(@PathVariable int id) {
-		return projectManagementService.deleteEmployee(id);
+	@DeleteMapping("/assignment")
+	public String removeEmployeeFromProject(@RequestBody EmployeeAndProjectVo employeeAndProjectIds) {
+		return projectManagementService.removeEmployeeFromProject(employeeAndProjectIds);
 	}
 	
 	@GetMapping("/employees")
