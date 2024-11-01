@@ -67,7 +67,7 @@ public class ProjectManagementController {
 		return projectManagementService.removeEmployeeFromProject(employeeAndProjectIds);
 	}
 	
-	@GetMapping("/employees")
+	@GetMapping("/topAllocatedEmployees")
 	public List<EmployeeVo> getEmployees() {
 		return projectManagementService.getEmployees();
 	}

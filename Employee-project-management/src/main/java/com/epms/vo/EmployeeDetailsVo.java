@@ -1,6 +1,7 @@
 package com.epms.vo;
 
-import jakarta.persistence.Column;
+import java.util.List;
+
 
 public class EmployeeDetailsVo {
 	private int employeeId;
@@ -9,22 +10,7 @@ public class EmployeeDetailsVo {
 	private String email;
 	private String department;
 	private int salary;
-	private int projectId;
-	private String roles;
-	private int allocationPercentage;
-	public EmployeeDetailsVo(int employeeId, String firstName, String lastName, String email, String department,
-			int salary, int projectId, String roles, int allocationPercentage) {
-		super();
-		this.employeeId = employeeId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.department = department;
-		this.salary = salary;
-		this.projectId = projectId;
-		this.roles = roles;
-		this.allocationPercentage = allocationPercentage;
-	}
+	private List<ProjectDataVo> projectDataVo;
 	public int getEmployeeId() {
 		return employeeId;
 	}
@@ -61,27 +47,15 @@ public class EmployeeDetailsVo {
 	public void setSalary(int salary) {
 		this.salary = salary;
 	}
-	public int getProjectId() {
-		return projectId;
+	public List<ProjectDataVo> getProjectDataVo() {
+		return projectDataVo;
 	}
-	public void setProjectId(int projectId) {
-		this.projectId = projectId;
-	}
-	public String getRoles() {
-		return roles;
-	}
-	public void setRoles(String roles) {
-		this.roles = roles;
-	}
-	public int getAllocationPercentage() {
-		return allocationPercentage;
-	}
-	public void setAllocationPercentage(int allocationPercentage) {
-		this.allocationPercentage = allocationPercentage;
+	public void setProjectDataVo(List<ProjectDataVo> projectDataVo) {
+		this.projectDataVo = projectDataVo;
 	}
 	
 	
-	
+
 	
 	
 }

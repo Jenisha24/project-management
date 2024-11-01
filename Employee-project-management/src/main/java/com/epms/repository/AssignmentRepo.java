@@ -35,6 +35,10 @@ public interface AssignmentRepo extends JpaRepository<Assignment, Integer> {
 	@Query("SELECT a FROM Assignment a WHERE a.employee.id = :employeeId AND a.project.id = :projectId")
     Assignment findAssignmentByEmployeeIdAndProjectId(@Param("employeeId") int employeeId, @Param("projectId") int projectId);
 	
+	@Query("SELECT a FROM Assignment a WHERE a.employee.employeeId = :employeeId ")
+	List<Assignment> findAssignmentByEmployeeId(@Param("employeeId") int employeeId);
+	
+	
 
 	
 	

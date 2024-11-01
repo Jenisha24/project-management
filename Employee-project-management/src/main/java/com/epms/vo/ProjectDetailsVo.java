@@ -1,9 +1,7 @@
 package com.epms.vo;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-
-import com.epms.entity.Project;
+import java.util.List;
 
 public class ProjectDetailsVo {
 	
@@ -12,21 +10,7 @@ public class ProjectDetailsVo {
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private int budget;
-	private int employeeeID;
-	private String roles;
-	private int salary;
-	
-	public ProjectDetailsVo(int projectId, int budget, LocalDate startDate, String string,
-			LocalDate localDate, int employeeeID, String roles, int salary) {
-		this.projectId = projectId;
-		this.projectName = string;
-		this.startDate = startDate;
-		this.endDate = localDate;
-		this.budget = budget;
-		this.employeeeID = employeeeID;
-		this.roles = roles;
-		this.salary = salary;
-	}
+	private List<EmployeeProjectDataVo> employeeProjectDataVo;
 	public int getProjectId() {
 		return projectId;
 	}
@@ -57,23 +41,11 @@ public class ProjectDetailsVo {
 	public void setBudget(int budget) {
 		this.budget = budget;
 	}
-	public int getEmployeeeID() {
-		return employeeeID;
+	public List<EmployeeProjectDataVo> getEmployeeProjectDataVo() {
+		return employeeProjectDataVo;
 	}
-	public void setEmployeeeID(int employeeeID) {
-		this.employeeeID = employeeeID;
-	}
-	public String getRoles() {
-		return roles;
-	}
-	public void setRoles(String roles) {
-		this.roles = roles;
-	}
-	public int getSalary() {
-		return salary;
-	}
-	public void setSalary(int salary) {
-		this.salary = salary;
+	public void setEmployeeProjectDataVo(List<EmployeeProjectDataVo> employeeProjectDataVo) {
+		this.employeeProjectDataVo = employeeProjectDataVo;
 	}
 	
 	
